@@ -4,17 +4,10 @@ var app = angular.module('cors', ['ionic']);
 app.controller('PopupCtrl', ['$scope', PopupCtrl]);
 
 function PopupCtrl($scope) {
-
-	$scope.active = false;
-	$scope.urls = [];
-	$scope.url = '';
-	$scope.exposedHeaders = '';
+	angular.extend($scope, config.defaults);
 
 	config.get(function(result) {
-		$scope.active = result.active;
-		$scope.urls = result.urls;
-		$scope.allowedMethods = result.allowedMethods;
-		$scope.exposedHeaders = result.exposedHeaders;
+		angular.extend($scope, result);
 		$scope.$apply();
 
 		$scope.$watch('active', function(newValue, oldValue) {

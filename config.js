@@ -1,5 +1,6 @@
 
 var config = {
+	current: null,
 	defaults: {
 		active: false,
 		urls: ['<all_urls>'],
@@ -9,11 +10,16 @@ var config = {
 	get: function(cb) {
 		chrome.storage.local.get(Object.keys(config.defaults), function(result) {
 			if (!result) {
+				config.current = config.defaults;
 				cb(config.defaults);
 			} else {
+				config.current = result;
 				cb(result);
 			}
 		});
+	},
+	getSync: function(key) {
+		return config.current[key];
 	},
 	set: function(key, value) {
 	}
