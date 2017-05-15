@@ -2,7 +2,7 @@ var accessControlRequestHeaders;
 var allowedMethods;
 var exposedHeaders;
 
-var requestListener = function(details){
+var requestListener = function(details) {
 	var flag = false,
 		rule = {
 			name: "Origin",
@@ -17,7 +17,9 @@ var requestListener = function(details){
 			break;
 		}
 	}
-	if(!flag) details.requestHeaders.push(rule);
+
+	if (!flag)
+		details.requestHeaders.push(rule);
 	
 	for (i = 0; i < details.requestHeaders.length; ++i) {
 		if (details.requestHeaders[i].name.toLowerCase() === "access-control-request-headers") {
@@ -30,7 +32,7 @@ var requestListener = function(details){
 
 var responseListener = function(details){
 	var flag = false,
-	rule = {
+		rule = {
 			"name": "Access-Control-Allow-Origin",
 			"value": "*"
 		};
@@ -42,17 +44,14 @@ var responseListener = function(details){
 			break;
 		}
 	}
-	if(!flag) details.responseHeaders.push(rule);
+	if (!flag) 
+		details.responseHeaders.push(rule);
 
-	if (accessControlRequestHeaders) {
-
+	if (accessControlRequestHeaders) 
 		details.responseHeaders.push({"name": "Access-Control-Allow-Headers", "value": accessControlRequestHeaders});
 
-	}
-
-	if(exposedHeaders) {
+	if (exposedHeaders) 
 		details.responseHeaders.push({"name": "Access-Control-Expose-Headers", "value": exposedHeaders});
-	}
 
 	details.responseHeaders.push({"name": "Access-Control-Allow-Methods", "value": allowedMethods});
 
@@ -67,7 +66,7 @@ chrome.runtime.onInstalled.addListener(function(){
 
 /*Reload settings*/
 function reload() {
-	chrome.storage.local.get({'active': false, 'urls': ["<all_urls>"], 'allowedMethods': 'GET, PUT, POST, DELETE, HEAD, OPTIONS', 'exposedHeaders': ''}, function(result) {
+	config.get(function(result) {
 
 		allowedMethods = result.allowedMethods;
 		exposedHeaders = result.exposedHeaders;
@@ -76,19 +75,20 @@ function reload() {
 		chrome.webRequest.onHeadersReceived.removeListener(responseListener);
 		chrome.webRequest.onBeforeSendHeaders.removeListener(requestListener);
 
-		if(result.active) {
+		if (result.active) {
 			chrome.browserAction.setIcon({path: "on.png"});
 
-			if(result.urls.length) {
+			console.log(result.urls);
+			if (result.urls.length) {
 
 				/*Add Listeners*/
 				chrome.webRequest.onHeadersReceived.addListener(responseListener, {
 					urls: result.urls
-				},["blocking", "responseHeaders"]);
+				}, ["blocking", "responseHeaders"]);
 
 				chrome.webRequest.onBeforeSendHeaders.addListener(requestListener, {
 					urls: result.urls
-				},["blocking", "requestHeaders"]);
+				}, ["blocking", "requestHeaders"]);
 			}
 		} else {
 			chrome.browserAction.setIcon({path: "off.png"});

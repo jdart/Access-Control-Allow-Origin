@@ -1,13 +1,16 @@
+
 var app = angular.module('cors', ['ionic']);
 
-app.controller('PopupCtrl', ['$scope', function($scope) {
+app.controller('PopupCtrl', ['$scope', PopupCtrl]);
+
+function PopupCtrl($scope) {
 
 	$scope.active = false;
 	$scope.urls = [];
 	$scope.url = '';
 	$scope.exposedHeaders = '';
 
-	chrome.storage.local.get({'active': false, 'urls': [], 'allowedMethods': 'GET, PUT, POST, DELETE, HEAD, OPTIONS', 'exposedHeaders': ''}, function(result) {
+	config.get(function(result) {
 		$scope.active = result.active;
 		$scope.urls = result.urls;
 		$scope.allowedMethods = result.allowedMethods;
@@ -28,11 +31,6 @@ app.controller('PopupCtrl', ['$scope', function($scope) {
 			chrome.storage.local.set({'exposedHeaders': $scope.exposedHeaders});
 			chrome.extension.getBackgroundPage().reload();
 		});
-
-		$scope.$watch('urls', function(newValue, oldValue) {
-			chrome.storage.local.set({'urls': $scope.urls});
-			chrome.extension.getBackgroundPage().reload();
-		});
 	});
 
 	$scope.openInNewTab = function(url) {
@@ -40,16 +38,18 @@ app.controller('PopupCtrl', ['$scope', function($scope) {
 	};
 
 	$scope.addUrl = function() {
-		if($scope.url && $.inArray($scope.url, $scope.urls) == -1) {
-			$scope.urls.unshift($scope.url);
-		}
+		$scope.urls.unshift($scope.url);
+		chrome.storage.local.set({'urls': $scope.urls});
 		$scope.url = '';
+		chrome.extension.getBackgroundPage().reload();
 	};
 
 	$scope.removeUrl = function(index) {
 		$scope.urls.splice(index, 1);
+		chrome.storage.local.set({'urls': $scope.urls});
+		chrome.extension.getBackgroundPage().reload();
 	};
-}]);
+}
 
 app.directive("textOption", function() {
 	return {
@@ -59,7 +59,7 @@ app.directive("textOption", function() {
 			placeholder: '@'
 		},
 		templateUrl: 'text-option.html',
-		controller : function($scope) {
+		controller: function($scope) {
 			$scope.editing = false;
 
 			$scope.onEdit = function() {

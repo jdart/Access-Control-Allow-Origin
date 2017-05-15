@@ -1,5 +1,5 @@
 {
-  "name": "Allow-Control-Allow-Origin: *",
+  "name": "access-control-allow-origin-star",
   "version": "1.0.0",
   "dependencies": {
     "ionic": "~0.9.27",
