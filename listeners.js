@@ -38,14 +38,14 @@ function Listeners() {
 		state.tabOrigins[tab.id] = urlToOrigin(tab.url);
 	}
 
-	function request(details) {
+	function prepare(details) {
 		state.requests[details.requestId] = {};
-
-		updateAllowHeaders(details, details.requestHeaders);
-
-		setHeader(details.requestHeaders, 'Origin', 'http://evil.com');
-
 		chrome.tabs.get(details.tabId, setTabOrigin);		
+	}
+
+	function request(details) {
+		updateAllowHeaders(details, details.requestHeaders);
+		setHeader(details.requestHeaders, 'Origin', 'http://evil.com');
 
 		return {requestHeaders: details.requestHeaders};
 	}
@@ -87,9 +87,11 @@ function Listeners() {
 		setHeader(details.responseHeaders, 'Access-Control-Allow-Methods', state.config.allowMethods);
 		setAllowHeaders(details, details.responseHeaders);
 
-		delete state.requests[details.requestId];
-
 		return {responseHeaders: details.responseHeaders};
+	}
+
+	function cleanup(details) {
+		delete state.requests[details.requestId];
 	}
 
 	function remove() {
@@ -103,6 +105,11 @@ function Listeners() {
 			return;
 
 		/*Add Listeners*/
+		chrome.webRequest.onBeforeRequest.addListener(prepare, {
+			urls: state.config.urls
+		}, ['blocking']);
+
+		/*Add Listeners*/
 		chrome.webRequest.onHeadersReceived.addListener(response, {
 			urls: state.config.urls
 		}, ['blocking', 'responseHeaders']);
@@ -110,6 +117,10 @@ function Listeners() {
 		chrome.webRequest.onBeforeSendHeaders.addListener(request, {
 			urls: state.config.urls
 		}, ['blocking', 'requestHeaders']);
+
+		chrome.webRequest.onCompleted.addListener(cleanup, {
+			urls: state.config.urls
+		});
 	}
 
 	function activate(config) {
