@@ -2,39 +2,51 @@
 function Listeners() {
 	var state = {
 		config: null,
-		requests: {}
+		requests: {},
+		tabOrigins: {}
 	};
 
 	return {activate};
 
-	function updateAllowHeaders(requestId, headers) {
+	function updateAllowHeaders(details, headers) {
 		var header = headers.find(headerNameEquals('Access-Control-Request-Headers'));
 
 		if (header) {
-			state.requests[requestId] = {
-				allowHeaders: header.value
-			};
+			setRequestState(details, 'allowHeaders', header.value);
 		}
 	}
 
-	function setAllowHeaders(requestId, headers) {
-		if (!state.requests[requestId])
+	function setAllowHeaders(details, headers) {
+		var allowHeaders = getRequestState(details, 'allowHeaders');
+
+		if (!allowHeaders)
 			return;
 
 		setHeader(
 			headers,
 			'Access-Control-Allow-Headers', 
-			state.requests[requestId].allowHeaders
+			allowHeaders
 		);
+	}
 
-		delete state.requests[requestId];
+	function urlToOrigin(url) {
+		var parts = url.split('/');
+		return parts[0] + '//' + parts[2];
+	}
+
+	function setTabOrigin(tab) {
+		state.tabOrigins[tab.id] = urlToOrigin(tab.url);
 	}
 
 	function request(details) {
-		updateAllowHeaders(details.requestId, details.requestHeaders);
+		state.requests[details.requestId] = {};
+
+		updateAllowHeaders(details, details.requestHeaders);
 
 		setHeader(details.requestHeaders, 'Origin', 'http://evil.com');
-		
+
+		chrome.tabs.get(details.tabId, setTabOrigin);		
+
 		return {requestHeaders: details.requestHeaders};
 	}
 
@@ -55,11 +67,27 @@ function Listeners() {
 		header.value = value;
 	}
 
+	function getRequestState(details, key) {
+		if (state.requests && state.requests[details.requestId])
+			return state.requests[details.requestId][key];
+		return null;
+	}
+
+	function setRequestState(details, key, value) {
+		if (!state.requests[details.requestId])
+			state.requests[details.requestId] = {};
+		state.requests[details.requestId][key] = value;
+	}
+
 	function response(details) {
-		setHeader(details.responseHeaders, 'Access-Control-Allow-Origin', '*');
+		var origin = state.tabOrigins[details.tabId] || '*';
+
+		setHeader(details.responseHeaders, 'Access-Control-Allow-Origin', origin);
 		setHeader(details.responseHeaders, 'Access-Control-Expose-Headers', state.config.exposeHeaders);
 		setHeader(details.responseHeaders, 'Access-Control-Allow-Methods', state.config.allowMethods);
-		setAllowHeaders(details.requestId, details.responseHeaders);
+		setAllowHeaders(details, details.responseHeaders);
+
+		delete state.requests[details.requestId];
 
 		return {responseHeaders: details.responseHeaders};
 	}
