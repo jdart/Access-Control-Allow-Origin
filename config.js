@@ -1,11 +1,10 @@
 
 var config = {
-	current: null,
 	defaults: {
 		active: false,
 		urls: ['<all_urls>'],
-		allowedMethods: 'GET, PUT, POST, DELETE, HEAD, PATCH, OPTIONS', 
-		exposedHeaders: ''
+		allowMethods: 'GET, PUT, POST, DELETE, HEAD, PATCH, OPTIONS', 
+		exposeHeaders: ''
 	},
 	get: function(cb) {
 		chrome.storage.local.get(Object.keys(config.defaults), function(result) {
@@ -17,9 +16,6 @@ var config = {
 				cb(result);
 			}
 		});
-	},
-	getSync: function(key) {
-		return config.current[key];
 	},
 	set: function(key, value) {
 	}

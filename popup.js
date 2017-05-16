@@ -6,23 +6,29 @@ app.controller('PopupCtrl', ['$scope', PopupCtrl]);
 function PopupCtrl($scope) {
 	angular.extend($scope, config.defaults);
 
+	function reload() {
+		var bg = chrome.extension.getBackgroundPage();
+		if (bg.reload)
+			bg.reload();
+	}
+
 	config.get(function(result) {
 		angular.extend($scope, result);
 		$scope.$apply();
 
 		$scope.$watch('active', function(newValue, oldValue) {
 			chrome.storage.local.set({'active': $scope.active});
-			chrome.extension.getBackgroundPage().reload();
+			reload();
 		});
 
-		$scope.$watch('allowedMethods', function(newValue, oldValue) {
-			chrome.storage.local.set({'allowedMethods': $scope.allowedMethods});
-			chrome.extension.getBackgroundPage().reload();
+		$scope.$watch('allowMethods', function(newValue, oldValue) {
+			chrome.storage.local.set({'allowMethods': $scope.allowMethods});
+			reload();
 		});
 
-		$scope.$watch('exposedHeaders', function(newValue, oldValue) {
-			chrome.storage.local.set({'exposedHeaders': $scope.exposedHeaders});
-			chrome.extension.getBackgroundPage().reload();
+		$scope.$watch('exposeHeaders', function(newValue, oldValue) {
+			chrome.storage.local.set({'exposeHeaders': $scope.exposeHeaders});
+			reload();
 		});
 	});
 
@@ -34,13 +40,13 @@ function PopupCtrl($scope) {
 		$scope.urls.unshift($scope.url);
 		chrome.storage.local.set({'urls': $scope.urls});
 		$scope.url = '';
-		chrome.extension.getBackgroundPage().reload();
+		reload();
 	};
 
 	$scope.removeUrl = function(index) {
 		$scope.urls.splice(index, 1);
 		chrome.storage.local.set({'urls': $scope.urls});
-		chrome.extension.getBackgroundPage().reload();
+		reload();
 	};
 }
 
