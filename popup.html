@@ -33,7 +33,7 @@
 					</label>
 					<a class="button button-icon button-small icon ion-plus-circled submit-action" ng-click="addUrl();"></a>
 				</div>
-				<div class="item item-icon-right animate-enter-leave" ng-repeat="url in urls">
+				<div class="item item-icon-right animate-enter-leave" ng-repeat="url in urls track by $index">
 					{{url}}
 					<a class="button button-icon button-small icon ion-ios7-trash-outline" ng-click="removeUrl($index);"></a>
 				</div>

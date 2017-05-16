@@ -7,9 +7,7 @@ function PopupCtrl($scope) {
 	angular.extend($scope, config.defaults);
 
 	function reload() {
-		var bg = chrome.extension.getBackgroundPage();
-		if (bg.reload)
-			bg.reload();
+		chrome.extension.getBackgroundPage().reload();
 	}
 
 	config.get(function(result) {
