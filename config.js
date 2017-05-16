@@ -7,17 +7,16 @@ var config = {
 		exposeHeaders: ''
 	},
 	get: function(cb) {
-		chrome.storage.local.get(Object.keys(config.defaults), function(result) {
-			if (!result) {
-				config.current = config.defaults;
-				cb(config.defaults);
-			} else {
-				config.current = result;
-				cb(result);
-			}
+		chrome.storage.sync.get(Object.keys(config.defaults), function(result) {
+			Object.keys(config.defaults).forEach(key => {
+				if (typeof result[key] === 'undefined')
+					result[key] = config.defaults[key];
+			});
+			cb(result);
 		});
 	},
 	set: function(key, value) {
+		chrome.storage.sync.set({[key]: value});
 	}
 };
 

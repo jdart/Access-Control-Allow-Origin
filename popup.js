@@ -1,34 +1,36 @@
 
 var app = angular.module('cors', ['ionic']);
+app.constant('config', config);
+app.controller('PopupCtrl', ['$scope', 'config', PopupCtrl]);
 
-app.controller('PopupCtrl', ['$scope', PopupCtrl]);
-
-function PopupCtrl($scope) {
-	angular.extend($scope, config.defaults);
+function PopupCtrl($scope, config) {
+	activate();
 
 	function reload() {
 		chrome.extension.getBackgroundPage().reload();
 	}
 
-	config.get(function(result) {
-		angular.extend($scope, result);
+	function persist(key) {
+		config.set(key, $scope[key]);
+		reload();
+	}
+
+	function activate() {
+		angular.extend($scope, config.defaults);
+		config.get(listen);
+	}
+
+	function watch(key) {
+		$scope.$watch(key, persist.bind(this, key));
+	}
+
+	function listen(config) {
+		angular.extend($scope, config);
 		$scope.$apply();
-
-		$scope.$watch('active', function(newValue, oldValue) {
-			chrome.storage.local.set({'active': $scope.active});
-			reload();
-		});
-
-		$scope.$watch('allowMethods', function(newValue, oldValue) {
-			chrome.storage.local.set({'allowMethods': $scope.allowMethods});
-			reload();
-		});
-
-		$scope.$watch('exposeHeaders', function(newValue, oldValue) {
-			chrome.storage.local.set({'exposeHeaders': $scope.exposeHeaders});
-			reload();
-		});
-	});
+		watch('active');
+		watch('allowMethods');
+		watch('exposeHeaders');
+	}
 
 	$scope.openInNewTab = function(url) {
 		chrome.tabs.create({ url: url });
@@ -36,15 +38,13 @@ function PopupCtrl($scope) {
 
 	$scope.addUrl = function() {
 		$scope.urls.unshift($scope.url);
-		chrome.storage.local.set({'urls': $scope.urls});
+		persist('urls');
 		$scope.url = '';
-		reload();
 	};
 
 	$scope.removeUrl = function(index) {
 		$scope.urls.splice(index, 1);
-		chrome.storage.local.set({'urls': $scope.urls});
-		reload();
+		persist('urls');
 	};
 }
 
