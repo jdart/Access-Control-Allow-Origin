@@ -1,10 +1,10 @@
 
 (function(corsExt) {
 	
-	function extend(result, defaults) {
+	function extend(target, defaults) {
 		Object.keys(defaults).forEach(key => {
-			if (typeof result[key] === 'undefined')
-				result[key] = defaults[key];
+			if (typeof target[key] === 'undefined')
+				target[key] = defaults[key];
 		});
 	}
 
