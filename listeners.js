@@ -85,6 +85,8 @@ function Listeners() {
 		setHeader(details.responseHeaders, 'Access-Control-Allow-Origin', origin);
 		setHeader(details.responseHeaders, 'Access-Control-Expose-Headers', state.config.exposeHeaders);
 		setHeader(details.responseHeaders, 'Access-Control-Allow-Methods', state.config.allowMethods);
+		setHeader(details.responseHeaders, 'Access-Control-Allow-Credentials', 'true');
+		
 		setAllowHeaders(details, details.responseHeaders);
 
 		return {responseHeaders: details.responseHeaders};
@@ -95,7 +97,6 @@ function Listeners() {
 	}
 
 	function remove() {
-		/*Remove Listeners*/
 		chrome.webRequest.onHeadersReceived.removeListener(response);
 		chrome.webRequest.onBeforeSendHeaders.removeListener(request);
 	}
@@ -104,12 +105,10 @@ function Listeners() {
 		if (!state.config.active || !state.config.urls.length) 
 			return;
 
-		/*Add Listeners*/
 		chrome.webRequest.onBeforeRequest.addListener(prepare, {
 			urls: state.config.urls
 		}, ['blocking']);
 
-		/*Add Listeners*/
 		chrome.webRequest.onHeadersReceived.addListener(response, {
 			urls: state.config.urls
 		}, ['blocking', 'responseHeaders']);
