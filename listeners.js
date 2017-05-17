@@ -74,8 +74,6 @@ function Listeners() {
 	}
 
 	function setRequestState(details, key, value) {
-		if (!state.requests[details.requestId])
-			state.requests[details.requestId] = {};
 		state.requests[details.requestId][key] = value;
 	}
 
