@@ -13,16 +13,15 @@
 		chrome.runtime.onInstalled.addListener(reload);
 	}
 
-	function icon(config) {
+	function icon(active) {
 		chrome.browserAction.setIcon({
-			path: config.active ? 'on.png' : 'off.png'
+			path: active ? 'on.png' : 'off.png'
 		});
 	}
 
 	function reload() {
 		corsExt.config.get(function(config) {
-			console.log(config);
-			icon(config);
+			icon(config.active);
 			listeners.activate(config);
 		}); 
 	}
