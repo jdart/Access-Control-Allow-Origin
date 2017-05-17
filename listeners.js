@@ -68,9 +68,7 @@ function Listeners() {
 	}
 
 	function getRequestState(details, key) {
-		if (state.requests && state.requests[details.requestId])
-			return state.requests[details.requestId][key];
-		return null;
+		return state.requests[details.requestId][key];
 	}
 
 	function setRequestState(details, key, value) {
