@@ -1,7 +1,9 @@
 
-var app = angular.module('cors', ['ionic'])
+angular.module('cors', ['ionic'])
 	.constant('config', corsExt.config)
-	.controller('PopupCtrl', PopupCtrl);
+	.controller('PopupCtrl', PopupCtrl)
+	.directive('submitOnEnter', submitOnEnter)
+	.directive('textOption', textOption);
 
 function PopupCtrl($scope, config) {
 	activate();
@@ -48,7 +50,7 @@ function PopupCtrl($scope, config) {
 	};
 }
 
-app.directive("textOption", function() {
+function textOption() {
 	return {
 		restrict: 'E',
 		scope: {
@@ -74,9 +76,9 @@ app.directive("textOption", function() {
 			};
 		}
 	};
-});
+}
 
-app.directive('submitOnEnter', function() {
+function submitOnEnter() {
 	return {
 		restrict: 'A',
 		link: function(scope, element, attrs) {
@@ -87,4 +89,4 @@ app.directive('submitOnEnter', function() {
 			});
 		}
 	};
-});
+}
