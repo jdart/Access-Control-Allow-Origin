@@ -4,7 +4,12 @@
 	"manifest_version": 2,
 	"description": "Allows to you request any site with ajax from any source. Adds to response 'Access-Control-Allow-Origin: *' header",
 	"background": {
-		"scripts": ["config.js", "listeners.js", "background.js"]
+		"scripts": [
+			"global.js",
+			"config.js",
+			"listeners.js",
+			"activate.js"
+		]
 	},
 	"browser_action": {
 		"default_icon": "off.png",

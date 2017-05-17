@@ -1,13 +1,13 @@
 
-var app = angular.module('cors', ['ionic']);
-app.constant('config', config);
-app.controller('PopupCtrl', ['$scope', 'config', PopupCtrl]);
+var app = angular.module('cors', ['ionic'])
+	.constant('config', corsExt.config)
+	.controller('PopupCtrl', PopupCtrl);
 
 function PopupCtrl($scope, config) {
 	activate();
 
 	function reload() {
-		chrome.extension.getBackgroundPage().reload();
+		chrome.extension.getBackgroundPage().corsExt.reload();
 	}
 
 	function persist(key) {

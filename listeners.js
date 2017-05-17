@@ -1,5 +1,5 @@
 
-function Listeners() {
+corsExt.Listeners = function() {
 	var state = {
 		config: null,
 		requests: {},
@@ -125,5 +125,5 @@ function Listeners() {
 		remove();
 		add();
 	}
-}
+};
 
