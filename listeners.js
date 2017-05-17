@@ -97,8 +97,10 @@ function Listeners() {
 	}
 
 	function remove() {
+		chrome.webRequest.onBeforeRequest.removeListener(prepare);
 		chrome.webRequest.onHeadersReceived.removeListener(response);
 		chrome.webRequest.onBeforeSendHeaders.removeListener(request);
+		chrome.webRequest.onCompleted.removeListener(cleanup);
 	}
 
 	function add() {
