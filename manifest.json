@@ -26,7 +26,9 @@
 		"storage",
 		"webRequest",
 		"webRequestBlocking",
-		"<all_urls>"
+		"<all_urls>",
+    "https://fonts.googleapis.com/",
+		"https://maxcdn.bootstrapcdn.com/"
 	],
 	"web_accessible_resources": [
 		"on.png",

@@ -15,7 +15,6 @@
 
 	function reload() {
 		corsExt.config.get(function(config) {
-			corsExt.icon(config);
 			listeners.activate(config);
 		}); 
 	}
