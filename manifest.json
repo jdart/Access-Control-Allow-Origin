@@ -5,7 +5,9 @@
 	"description": "Allows to you request any site with ajax from any source. Adds to response 'Access-Control-Allow-Origin: *' header",
 	"background": {
 		"scripts": [
+			"bower_components/bower-webfontloader/webfont.js",
 			"global.js",
+			"tabs.js",
 			"config.js",
 			"icon.js",
 			"listeners.js",
