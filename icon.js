@@ -2,7 +2,8 @@
 (function(corsExt) {
 
 	var canvas,
-		context;
+		context,
+		fontsReady;
 
 	activate();
 
@@ -18,7 +19,10 @@
 				families: ['FontAwesome'],
 				urls: ['https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css']
 			},
-			active: update
+			active: function() { 
+				fontsReady = true;
+				update();
+			}
 		});
 		
 		drawWithoutFonts();
@@ -67,7 +71,10 @@
 	}
 
 	function update() {
-		corsExt.config.get(draw);
+		if (fontsReady)
+			corsExt.config.get(draw);
+		else
+			drawWithoutFonts();
 	}
 
 	corsExt.icon = update;
