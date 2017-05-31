@@ -2,8 +2,7 @@
 corsExt.Listeners = function() {
 	var state = {
 		config: null,
-		requests: {},
-		tabOrigins: {}
+		requests: {}
 	};
 
 	return {activate};
@@ -29,18 +28,9 @@ corsExt.Listeners = function() {
 		);
 	}
 
-	function urlToOrigin(url) {
-		var parts = url.split('/');
-		return parts[0] + '//' + parts[2];
-	}
-
-	function setTabOrigin(tab) {
-		state.tabOrigins[tab.id] = urlToOrigin(tab.url);
-	}
-
 	function prepare(details) {
 		state.requests[details.requestId] = {};
-		chrome.tabs.get(details.tabId, setTabOrigin);		
+		corsExt.tabs.manipulated(details.tabId);
 	}
 
 	function request(details) {
@@ -68,7 +58,9 @@ corsExt.Listeners = function() {
 	}
 
 	function getRequestState(details, key) {
-		return state.requests[details.requestId][key];
+		if (typeof state.requests[details.requestId] === 'object')
+			return state.requests[details.requestId][key];
+		return null;
 	}
 
 	function setRequestState(details, key, value) {
@@ -76,7 +68,7 @@ corsExt.Listeners = function() {
 	}
 
 	function response(details) {
-		var origin = state.tabOrigins[details.tabId] || '*';
+		var origin = corsExt.tabs.origin(details.tabId, '*');
 
 		setHeader(details.responseHeaders, 'Access-Control-Allow-Origin', origin);
 		setHeader(details.responseHeaders, 'Access-Control-Expose-Headers', state.config.exposeHeaders);

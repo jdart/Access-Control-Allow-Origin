@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "dependencies": {
     "ionic": "~0.9.27",
-    "jquery": "~2.1.1"
+    "jquery": "~2.1.1",
+    "bower-webfontloader": "^1.6.6"
   }
 }
