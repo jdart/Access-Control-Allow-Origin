@@ -15,7 +15,6 @@
 		]
 	},
 	"browser_action": {
-		"default_icon": "off.png",
 		"default_title": "Who CORS?",
 		"default_popup": "popup.html"
 	},
@@ -32,8 +31,5 @@
     "https://fonts.googleapis.com/",
 		"https://maxcdn.bootstrapcdn.com/"
 	],
-	"web_accessible_resources": [
-		"on.png",
-		"off.png"
-	]
+	"web_accessible_resources": []
 }

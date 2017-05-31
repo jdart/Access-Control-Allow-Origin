@@ -35,9 +35,9 @@
 		context.font = '14px Arial';
 		context.fillStyle = '#444';  
 		context.fillText('c', 0, -4);
-		context.fillText('o', 10, -4);
+		context.fillText('o', 8, -4);
 		context.fillText('r', 0, 6);
-		context.fillText('s', 10, 6);
+		context.fillText('s', 8, 6);
 
 		chrome.browserAction.setIcon({
 			imageData: context.getImageData(0, 0, 19, 19)
@@ -52,18 +52,18 @@
 
 		if (!config.active) {
 			context.fillStyle = '#999';  
-			context.fillText('o', 10, -3);
+			context.fillText('o', 8, -3);
 		} else {
 			context.font = '10px FontAwesome';
 			context.fillStyle = corsExt.tabs.currentManipulated() ? 'green' : '#444';
-			context.fillText(String.fromCharCode('0xf08a'), 8, 0);
+			context.fillText(String.fromCharCode('0xf004'), 8, 0);
 			context.fillStyle = '#444';  
 		}
 
 		context.font = '14px Inconsolata';
 		context.fillText('c', 0, -3);
 		context.fillText('r', 0, 7);
-		context.fillText('s', 10, 7);
+		context.fillText('s', 8, 7);
 
 		chrome.browserAction.setIcon({
 			imageData: context.getImageData(0, 0, 19, 19)

@@ -19,8 +19,8 @@
 	function manipulated(tabId) {
 		if (tabs[tabId] && tabs[tabId].manipulated === false) {
 			tabs[tabId].manipulated = true;
-			corsExt.icon();
 		}
+		corsExt.icon();
 	}
 
 	function origin(tabId, fallback) {
@@ -43,19 +43,20 @@
 	}
 
 	function setTabOrigin(tab) {
-		const nextOrigin = urlToOrigin(tab.url);
-		if (
-			typeof tabs[tab.id] === 'undefined' 
-			|| nextOrigin !== tabs[tab.id].origin
-		) {
-			tabs[tab.id] = { origin: nextOrigin, manipulated: false };
-			corsExt.icon();
-		}
+		const origin = urlToOrigin(tab.url);
+		const state = tabs[tab.id]
+
+		if (typeof state === 'undefined' || origin !== state.origin) {
+			tabs[tab.id] = { origin, manipulated: false };
+		} 
+
+		corsExt.icon();
 	}
 
 	function updated(tabId, changeInfo, tab) {
 		if (tab.url) {
 			setTabOrigin(tab);
+			corsExt.icon();
 		}
 	}
 
