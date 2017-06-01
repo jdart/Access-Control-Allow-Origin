@@ -11,6 +11,8 @@
 		Object.assign(corsExt, {reload});
 		
 		chrome.runtime.onInstalled.addListener(reload);
+
+		reload();
 	}
 
 	function reload() {
