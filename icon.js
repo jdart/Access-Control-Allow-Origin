@@ -22,6 +22,9 @@
 			active: function() { 
 				fontsReady = true;
 				update();
+			},
+			inactive: function() {
+				setTimeout(activate, 15000);
 			}
 		});
 		

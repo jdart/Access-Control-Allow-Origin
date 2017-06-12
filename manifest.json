@@ -1,6 +1,6 @@
 {
 	"name": "Who CORS?",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"manifest_version": 2,
 	"description": "Make requests to domains without having to worry about CORS.",
 	"background": {
