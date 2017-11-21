@@ -13,7 +13,8 @@
 			active: false,
 			urls: ['<all_urls>'],
 			allowMethods: 'GET, PUT, POST, DELETE, HEAD, PATCH, OPTIONS', 
-			exposeHeaders: ''
+			exposeHeaders: '',
+			origin: 'http://evil.com'
 		},
 		get: function(cb) {
 			chrome.storage.sync.get(

@@ -29,6 +29,7 @@ function PopupCtrl($scope, config) {
 	function listen(config) {
 		angular.extend($scope, config);
 		$scope.$apply();
+		watch('origin');
 		watch('active');
 		watch('allowMethods');
 		watch('exposeHeaders');
