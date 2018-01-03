@@ -1,15 +1,13 @@
 html {
 	width: 400px;
-	min-height: 444px;
+	min-height: 500px;
 }
 
 .has-header {
 	position: relative;
 	top: 44px !important;
-	height: 400px;
 	overflow-x: hidden;
 	overflow-y: auto;
-
 }
 
 label.toggle {
