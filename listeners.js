@@ -101,11 +101,11 @@ corsExt.Listeners = function() {
 
         chrome.webRequest.onHeadersReceived.addListener(response, {
             urls: state.config.urls
-        }, ['blocking', 'responseHeaders']);
+        }, ['blocking', 'responseHeaders', 'extraHeaders']);
 
         chrome.webRequest.onBeforeSendHeaders.addListener(request, {
             urls: state.config.urls
-        }, ['blocking', 'requestHeaders']);
+        }, ['blocking', 'requestHeaders', 'extraHeaders']);
 
         chrome.webRequest.onCompleted.addListener(cleanup, {
             urls: state.config.urls
